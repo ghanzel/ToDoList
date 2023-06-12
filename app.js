@@ -1,7 +1,46 @@
+// load saved tasks from local storage
+const tasks = JSON.parse(localStorage.getItem("taskList"));
 const input = document.getElementById("addTodoInput");
 const listElement = document.getElementsByClassName("to-do-list");
 const submitBtn = document.getElementById("submit-btn");
 const selectBtns = document.querySelectorAll("#selector button");
+
+loadElements();
+
+function loadElements() {
+  let savedTasks = JSON.parse(localStorage.getItem("taskList"));
+  if (savedTasks !== null) {
+    for (let i = 0; i < savedTasks.length; i++) {
+      const userText = savedTasks[i];
+      // create all elements
+      const newDivListContainer = document.createElement("div");
+      const newLI = document.createElement("li");
+      const newDivBtnContainer = document.createElement("div");
+      const newCheckBtn = document.createElement("button");
+      const newDeleteBtn = document.createElement("button");
+
+      // add classes
+      newDivListContainer.classList.add("to-do-list-item-container");
+      newDivBtnContainer.classList.add("btn-container");
+      newCheckBtn.classList.add("complete-btn");
+      newDeleteBtn.classList.add("delete-btn");
+
+      // add content:
+      newLI.innerText = `${userText}`;
+      newCheckBtn.innerText = "Complete";
+      newDeleteBtn.innerText = "Delete";
+
+      // append children
+      newDivListContainer.appendChild(newLI);
+      newDivListContainer.appendChild(newDivBtnContainer);
+      newDivBtnContainer.appendChild(newCheckBtn);
+      newDivBtnContainer.appendChild(newDeleteBtn);
+
+      // append new element to the lu
+      listElement[0].appendChild(newDivListContainer);
+    }
+  }
+}
 
 // Functions
 
@@ -35,6 +74,9 @@ function createElement() {
   listElement[0].appendChild(newDivListContainer);
 
   input.value = "";
+
+  tasks.push(userText);
+  localStorage.setItem("taskList", JSON.stringify(tasks));
 }
 
 function completeTask(e) {
@@ -93,10 +135,18 @@ document.addEventListener("click", function (e) {
   }
 });
 
-document.addEventListener("click", function (e) {
+document.addEventListener("click", removeElement);
+
+function removeElement(e) {
   if (e.target.classList.contains("delete-btn")) {
     e.target.parentElement.parentElement.remove();
+
+    let toRemoveLi =
+      e.target.parentElement.parentElement.querySelector("li").innerText;
+    const index = tasks.indexOf(toRemoveLi);
+    tasks.splice(index, 1);
+    localStorage.setItem("taskList", JSON.stringify(tasks));
   }
-});
+}
 
 ///////////////////////

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>My To Do List</title>
+  </head>
+  <body>
+    <h1>My To Do List</h1>
+    <div class="addTodoContainer">
+      <input
+        type="text"
+        id="addTodoInput"
+        name="addTodoInput"
+        placeholder="Add your task"
+      />
+      <button id="submit-btn" type="submit">Add</button>
+    </div>
+    <div id="selector">
+      <button id="all-tasks">All</button>
+      <button id="completed-tasks">Completed</button>
+      <button id="outstanding-tasks">Outstanding</button>
+    </div>
+
+    <ul class="to-do-list">
+      <div class="to-do-list-item-container">
+        <li>item1</li>
+        <div class="btn-container">
+          <button class="complete-btn">Complete</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </div>
+    </ul>
+
+    <script src="app.js"></script>
+  </body>
+</html>

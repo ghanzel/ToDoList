@@ -1,5 +1,6 @@
 // load saved tasks from local storage
 const tasks = JSON.parse(localStorage.getItem("taskList"));
+//const tasks = [];
 const input = document.getElementById("addTodoInput");
 const listElement = document.getElementsByClassName("to-do-list");
 const submitBtn = document.getElementById("submit-btn");
@@ -7,11 +8,12 @@ const selectBtns = document.querySelectorAll("#selector button");
 
 loadElements();
 
+// Functions
 function loadElements() {
   let savedTasks = JSON.parse(localStorage.getItem("taskList"));
   if (savedTasks !== null) {
     for (let i = 0; i < savedTasks.length; i++) {
-      const userText = savedTasks[i];
+      const userText = savedTasks[i].name;
       // create all elements
       const newDivListContainer = document.createElement("div");
       const newLI = document.createElement("li");
@@ -24,6 +26,7 @@ function loadElements() {
       newDivBtnContainer.classList.add("btn-container");
       newCheckBtn.classList.add("complete-btn");
       newDeleteBtn.classList.add("delete-btn");
+      newLI.classList.add(savedTasks[i].class);
 
       // add content:
       newLI.innerText = `${userText}`;
@@ -42,8 +45,6 @@ function loadElements() {
   }
 }
 
-// Functions
-
 function createElement() {
   const userText = input.value;
   // create all elements
@@ -58,6 +59,7 @@ function createElement() {
   newDivBtnContainer.classList.add("btn-container");
   newCheckBtn.classList.add("complete-btn");
   newDeleteBtn.classList.add("delete-btn");
+  newLI.classList.add("outstanding");
 
   // add content:
   newLI.innerText = `${userText}`;
@@ -75,12 +77,39 @@ function createElement() {
 
   input.value = "";
 
-  tasks.push(userText);
+  const newTask = {};
+  newTask.name = userText;
+  newTask.class = newLI.classList.value;
+
+  tasks.push(newTask);
   localStorage.setItem("taskList", JSON.stringify(tasks));
 }
 
 function completeTask(e) {
-  console.log(e.target.parenElement.parentElement.li);
+  if (e.target.classList.contains("complete-btn")) {
+    const targetLI = e.target.parentElement.parentElement.querySelector("li");
+    targetLI.classList.toggle("completed");
+    targetLI.classList.toggle("outstanding");
+
+    for (i = 0; i < tasks.length; i++) {
+      if (tasks[i].name === targetLI.innerText) {
+        //update class:
+        if (targetLI.classList.contains("completed")) {
+          tasks[i].class = "completed";
+          console.log(tasks[i].class);
+        } else {
+          tasks[i].class = "outstanding";
+        }
+
+        //update stored array
+        localStorage.setItem("taskList", JSON.stringify(tasks));
+      }
+    }
+
+    // name: LI.innerText, class: LI.classList
+
+    //change value of object.class in storage
+  }
 }
 
 function changeDisplay(e) {
@@ -113,30 +142,6 @@ function changeDisplay(e) {
   }
 }
 
-// Listeners
-
-submitBtn.addEventListener("click", createElement);
-
-input.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    createElement();
-  }
-});
-
-for (let j = 0; j < selectBtns.length; j++) {
-  selectBtns[j].addEventListener("click", changeDisplay);
-}
-
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("complete-btn")) {
-    e.target.parentElement.parentElement
-      .querySelector("li")
-      .classList.toggle("completed");
-  }
-});
-
-document.addEventListener("click", removeElement);
-
 function removeElement(e) {
   if (e.target.classList.contains("delete-btn")) {
     e.target.parentElement.parentElement.remove();
@@ -149,4 +154,21 @@ function removeElement(e) {
   }
 }
 
-///////////////////////
+// Listeners
+
+// add task:
+submitBtn.addEventListener("click", createElement);
+input.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    createElement();
+  }
+});
+
+// select all, completed, outstanding
+for (let j = 0; j < selectBtns.length; j++) {
+  selectBtns[j].addEventListener("click", changeDisplay);
+}
+
+// complete or delete task
+document.addEventListener("click", completeTask);
+document.addEventListener("click", removeElement);

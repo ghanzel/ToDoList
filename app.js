@@ -1,15 +1,15 @@
-// load saved tasks from local storage
+// VARIABLES:
 const tasks = JSON.parse(localStorage.getItem("taskList"));
-//const tasks = [];
 const input = document.getElementById("addTodoInput");
 const listElement = document.getElementsByClassName("to-do-list");
 const submitBtn = document.getElementById("submit-btn");
 const selectBtns = document.querySelectorAll("#selector button");
 
-loadElements();
+loadSavedTasks();
 
-// Functions
-function loadElements() {
+// FUNCTIONS:
+
+function loadSavedTasks() {
   let savedTasks = JSON.parse(localStorage.getItem("taskList"));
   if (savedTasks !== null) {
     for (let i = 0; i < savedTasks.length; i++) {
@@ -74,52 +74,53 @@ function createElement() {
 
   // append new element to the lu
   listElement[0].appendChild(newDivListContainer);
-
+  // clear input field:
   input.value = "";
-
+  // create an object to add to array that will be stored
   const newTask = {};
   newTask.name = userText;
   newTask.class = newLI.classList.value;
-
+  // add object to array
   tasks.push(newTask);
+  // update local storage with new array
   localStorage.setItem("taskList", JSON.stringify(tasks));
 }
 
 function completeTask(e) {
+  // if statement required as event listener is on document.
   if (e.target.classList.contains("complete-btn")) {
+    // toggle completed/outstanding class of li
     const targetLI = e.target.parentElement.parentElement.querySelector("li");
     targetLI.classList.toggle("completed");
     targetLI.classList.toggle("outstanding");
 
+    // update the value of the class key of the object in local storage:
     for (i = 0; i < tasks.length; i++) {
+      // if the task description is the same as object name value in storage
       if (tasks[i].name === targetLI.innerText) {
-        //update class:
+        //update class value of the object:
         if (targetLI.classList.contains("completed")) {
           tasks[i].class = "completed";
           console.log(tasks[i].class);
         } else {
           tasks[i].class = "outstanding";
         }
-
-        //update stored array
+        //update array in local storage
         localStorage.setItem("taskList", JSON.stringify(tasks));
       }
     }
-
-    // name: LI.innerText, class: LI.classList
-
-    //change value of object.class in storage
   }
 }
 
 function changeDisplay(e) {
+  // get a list of all <li>s
   let LIs = document.querySelectorAll("li");
-
+  // different actions depending on which btn clicked on:
   switch (e.target.id) {
     case "completed-tasks":
-      console.log(e.target.id);
       for (let i = 0; i < LIs.length; i++) {
-        if (!LIs[i].classList.contains("completed")) {
+        if (LIs[i].classList.contains("outstanding")) {
+          // hide outstanding tasks
           LIs[i].parentElement.style.display = "none";
         } else {
           LIs[i].parentElement.style.display = "flex";
@@ -128,16 +129,18 @@ function changeDisplay(e) {
       break;
     case "outstanding-tasks":
       for (let i = 0; i < LIs.length; i++) {
-        if (!LIs[i].classList.contains("completed")) {
+        if (LIs[i].classList.contains("outstanding")) {
           LIs[i].parentElement.style.display = "flex";
         } else {
           LIs[i].parentElement.style.display = "none";
+          // hide completed tasks
         }
       }
       break;
     case "all-tasks":
       for (let i = 0; i < LIs.length; i++) {
         LIs[i].parentElement.style.display = "flex";
+        // show all tasks
       }
   }
 }
@@ -145,18 +148,19 @@ function changeDisplay(e) {
 function removeElement(e) {
   if (e.target.classList.contains("delete-btn")) {
     e.target.parentElement.parentElement.remove();
-
+    // find the index of item to remove
     let toRemoveLi =
       e.target.parentElement.parentElement.querySelector("li").innerText;
     const index = tasks.indexOf(toRemoveLi);
+    // remove item from array in local storage
     tasks.splice(index, 1);
     localStorage.setItem("taskList", JSON.stringify(tasks));
   }
 }
 
-// Listeners
+// EVENT LISTENERS:
 
-// add task:
+// add task btn / Enter
 submitBtn.addEventListener("click", createElement);
 input.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
@@ -164,7 +168,7 @@ input.addEventListener("keypress", function (e) {
   }
 });
 
-// select all, completed, outstanding
+// select All, Completed, Outstanding
 for (let j = 0; j < selectBtns.length; j++) {
   selectBtns[j].addEventListener("click", changeDisplay);
 }

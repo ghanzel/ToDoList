@@ -39,3 +39,7 @@ li {
 .completed {
   text-decoration: line-through;
 }
+
+.outstanding {
+  text-decoration: none;
+}

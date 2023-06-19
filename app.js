@@ -151,10 +151,12 @@ function removeElement(e) {
     // find the index of item to remove
     let toRemoveLi =
       e.target.parentElement.parentElement.querySelector("li").innerText;
-    const index = tasks.indexOf(toRemoveLi);
-    // remove item from array in local storage
-    tasks.splice(index, 1);
-    localStorage.setItem("taskList", JSON.stringify(tasks));
+    for (i = 0; i < tasks.length; i++) {
+      if (tasks[i].name === toRemoveLi) {
+        tasks.splice(i, 1);
+        localStorage.setItem("taskList", JSON.stringify(tasks));
+      }
+    }
   }
 }
 

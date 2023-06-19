@@ -10,43 +10,15 @@ loadSavedTasks();
 // FUNCTIONS:
 
 function loadSavedTasks() {
-  let savedTasks = JSON.parse(localStorage.getItem("taskList"));
-  if (savedTasks !== null) {
-    for (let i = 0; i < savedTasks.length; i++) {
-      const userText = savedTasks[i].name;
-      // create all elements
-      const newDivListContainer = document.createElement("div");
-      const newLI = document.createElement("li");
-      const newDivBtnContainer = document.createElement("div");
-      const newCheckBtn = document.createElement("button");
-      const newDeleteBtn = document.createElement("button");
-
-      // add classes
-      newDivListContainer.classList.add("to-do-list-item-container");
-      newDivBtnContainer.classList.add("btn-container");
-      newCheckBtn.classList.add("complete-btn");
-      newDeleteBtn.classList.add("delete-btn");
-      newLI.classList.add(savedTasks[i].class);
-
-      // add content:
-      newLI.innerText = `${userText}`;
-      newCheckBtn.innerText = "Complete";
-      newDeleteBtn.innerText = "Delete";
-
-      // append children
-      newDivListContainer.appendChild(newLI);
-      newDivListContainer.appendChild(newDivBtnContainer);
-      newDivBtnContainer.appendChild(newCheckBtn);
-      newDivBtnContainer.appendChild(newDeleteBtn);
-
-      // append new element to the lu
-      listElement[0].appendChild(newDivListContainer);
+  if (tasks !== null) {
+    // TODO: This is correct, but you probably have a foreach in javascript that will save you from having to address arrays by index. Smaller and clearer code is always nice to have, even if the enhance in appearance is very little. There is also a slight increase in performance, even if small enough to ignore for this case. Feel free to remove this comment without making any changes.
+    for (let i = 0; i < tasks.length; i++) {
+      createElement(tasks[i].name, tasks[i].class);
     }
   }
 }
 
-function createElement() {
-  const userText = input.value;
+function createElement(userText, addedClass) {
   // create all elements
   const newDivListContainer = document.createElement("div");
   const newLI = document.createElement("li");
@@ -59,10 +31,10 @@ function createElement() {
   newDivBtnContainer.classList.add("btn-container");
   newCheckBtn.classList.add("complete-btn");
   newDeleteBtn.classList.add("delete-btn");
-  newLI.classList.add("outstanding");
+  newLI.classList.add(addedClass);
 
   // add content:
-  newLI.innerText = `${userText}`;
+  newLI.innerText = userText;
   newCheckBtn.innerText = "Complete";
   newDeleteBtn.innerText = "Delete";
 
@@ -74,12 +46,17 @@ function createElement() {
 
   // append new element to the lu
   listElement[0].appendChild(newDivListContainer);
+}
+
+function createTask() {
+  const taskName = `${input.value}`;
+  createElement(taskName, "outstanding");
   // clear input field:
   input.value = "";
   // create an object to add to array that will be stored
   const newTask = {};
-  newTask.name = userText;
-  newTask.class = newLI.classList.value;
+  newTask.name = taskName;
+  newTask.class = "outstanding";
   // add object to array
   tasks.push(newTask);
   // update local storage with new array
@@ -163,10 +140,10 @@ function removeElement(e) {
 // EVENT LISTENERS:
 
 // add task btn / Enter
-submitBtn.addEventListener("click", createElement);
+submitBtn.addEventListener("click", createTask);
 input.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
-    createElement();
+    createTask();
   }
 });
 

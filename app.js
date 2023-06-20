@@ -35,8 +35,8 @@ function createElement(userText, addedClass) {
 
   // add content:
   newLI.innerText = userText;
-  newCheckBtn.innerText = "Complete";
-  newDeleteBtn.innerText = "Delete";
+  newCheckBtn.innerHTML = '<i class="fa fa-solid fa-check"></i>';
+  newDeleteBtn.innerHTML = '<i class="fa fa-solid fa-trash"></i>';
 
   // append children
   newDivListContainer.appendChild(newLI);

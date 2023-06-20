@@ -50,17 +50,28 @@ function createElement(userText, addedClass) {
 
 function createTask() {
   const taskName = `${input.value}`;
-  createElement(taskName, "outstanding");
-  // clear input field:
-  input.value = "";
-  // create an object to add to array that will be stored
-  const newTask = {};
-  newTask.name = taskName;
-  newTask.class = "outstanding";
-  // add object to array
-  tasks.push(newTask);
-  // update local storage with new array
-  localStorage.setItem("taskList", JSON.stringify(tasks));
+  // check if the task is already on the list
+  let duplicateTasks = [];
+  for (let i = 0; i < tasks.length; i++) {
+    if (tasks[i].name === taskName) {
+      duplicateTasks.push(taskName);
+    }
+  }
+  // prevent adding empty or duplicate tasks
+  if (taskName !== "" && duplicateTasks.length === 0) {
+    createElement(taskName, "outstanding");
+    // clear input field and empty array:
+    input.value = "";
+    duplicateTasks = [];
+    // create an object to add to array that will be stored
+    const newTask = {};
+    newTask.name = taskName;
+    newTask.class = "outstanding";
+    // add object to array
+    tasks.push(newTask);
+    // update local storage with new array
+    localStorage.setItem("taskList", JSON.stringify(tasks));
+  }
 }
 
 function completeTask(e) {
@@ -78,7 +89,6 @@ function completeTask(e) {
         //update class value of the object:
         if (targetLI.classList.contains("completed")) {
           tasks[i].class = "completed";
-          console.log(tasks[i].class);
         } else {
           tasks[i].class = "outstanding";
         }

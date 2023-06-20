@@ -50,15 +50,10 @@ function createElement(userText, addedClass) {
 
 function createTask() {
   const taskName = `${input.value}`;
-  // check if the task is already on the list
-  let duplicateTasks = [];
-  for (let i = 0; i < tasks.length; i++) {
-    if (tasks[i].name === taskName) {
-      duplicateTasks.push(taskName);
-    }
-  }
+
   // prevent adding empty or duplicate tasks
-  if (taskName !== "" && duplicateTasks.length === 0) {
+  let duplicateTasks = tasks.find((task) => task.name == taskName);
+  if (taskName !== "" && !duplicateTasks) {
     createElement(taskName, "outstanding");
     // clear input field and empty array:
     input.value = "";
@@ -71,6 +66,8 @@ function createTask() {
     tasks.push(newTask);
     // update local storage with new array
     localStorage.setItem("taskList", JSON.stringify(tasks));
+  } else {
+    alert("This task already exists.");
   }
 }
 

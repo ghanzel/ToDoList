@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Bad+Script&display=swap");
+
 body {
   background-color: #f5efe7;
   color: #213555;
@@ -7,6 +9,11 @@ body {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  font-family: "Bad Script", cursive;
+}
+
+h1 {
+  font-size: 64px;
 }
 
 button {
@@ -14,20 +21,23 @@ button {
   color: #f5efe7;
   border: #f5efe7 1px solid;
   border-radius: 25px;
+  padding: 10px;
 }
 
 ul {
   padding: 0;
-  margin-top: 3rem;
+  margin-top: 10px;
 }
 
 li {
   list-style: none;
   padding-right: 15px;
   flex-basis: 1;
+  font-size: 24px;
 }
 
-input {
+input,
+#submit-btn {
   padding: 15px;
   font-size: 16px;
   border: #f5efe7 1px solid;
@@ -35,7 +45,14 @@ input {
 }
 
 #selector {
-  padding: 6px;
+  padding-top: 60px;
+}
+
+.addTodoContainer {
+  margin-top: 15px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
 }
 
 .to-do-list-item-container {
@@ -62,4 +79,8 @@ input {
 
 .outstanding {
   text-decoration: none;
+}
+
+.fa {
+  pointer-events: none;
 }
